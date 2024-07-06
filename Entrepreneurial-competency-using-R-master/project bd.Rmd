@@ -1,0 +1,609 @@
+---
+title: "Principles of big data management project"
+author: "Siddhesh Yerramneni & Praveenya M"
+date: "2022-11-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+data <- read.csv("C:/Users/HP/OneDrive/Desktop/Dataset-BD/entre.csv")
+edadata <- read.csv("C:/Users/HP/OneDrive/Desktop/Dataset-BD/entre.csv")
+```
+
+```{r}
+library(dplyr)
+data1 <- distinct(data)
+```
+
+
+```{r}
+head(data1)
+```
+
+```{r}
+tail(data1)
+```
+
+```{r}
+nrow(data1)
+```
+
+```{r}
+ncol(data1)
+```
+```{r}
+summary(data1)
+```
+```{r}
+str(data1)
+```
+```{r}
+colSums(is.na(data1))
+```
+
+```{r}
+head(unique(data1$ReasonsForLack))
+```
+```{r}
+data2 <- select(data1,-ReasonsForLack)
+head(data2)
+```
+
+```{r}
+max(data2$Age)
+```
+```{r}
+min(data2$Age)
+```
+
+```{r}
+summarise(data2,age_mean=mean(Age))
+```
+
+```{r}
+unique(data2$KeyTraits)
+```
+
+```{r}
+data2 <- data2%>%
+  mutate(EducationSector = recode(EducationSector, "Engineering Sciences" = "1", "Others" = "2", "Economic Sciences, Business Studies, Commerce and Law" = "3", "Art, Music or Design"  = "4", "Humanities and Social Sciences" = "5", "Medicine, Health Sciences" = "6", "Teaching Degree (e.g., B.Ed)" = "7", "Mathematics or Natural Sciences" = "8", "Language and Cultural Studies" = "9"))
+```
+
+```{r}
+ data2 <- data2%>%
+  mutate(IndividualProject = recode(IndividualProject, "No" = "1", "Yes" = "2"))
+```
+
+```{r}
+data2 <- data2%>%
+ mutate(City = recode(City, "No" = "1", "Yes" = "2"))%>%
+  mutate(Influenced = recode(Influenced, "Yes" = "1", "No" = "2"))
+```
+
+```{r}
+unique(data2$KeyTraits)
+```
+
+
+```{r}
+ data2 <- data2%>%
+  mutate(KeyTraits = recode(KeyTraits, "Passion" = "1", "Vision" = "2", "Resilience" = "3", "Positivity" = "4", "Work Ethic" = "5"))%>%
+  mutate(Gender = recode(Gender, "Male" = "1", "Female" = "2"))
+```
+
+```{r}
+data2 <- data2%>%
+ mutate(MentalDisorder = recode(MentalDisorder, "No" = "1", "Yes" = "2"))
+```
+
+
+```{r}
+str(data2)
+```
+```{r}
+data2$EducationSector <- as.integer(data2$EducationSector)
+data2$IndividualProject <- as.integer(data2$IndividualProject)
+data2$Gender <- as.integer(data2$Gender)
+data2$City <- as.integer(data2$City)
+data2$Influenced <- as.integer(data2$Influenced)
+data2$MentalDisorder <- as.integer(data2$MentalDisorder)
+data2$KeyTraits <- as.integer(data2$KeyTraits)
+```
+
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=EducationSector))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  ggtitle("Education sector")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=IndividualProject))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  ggtitle("IndividualProject sector")
+```
+
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Age))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(Age)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("Age distribution")
+```
+
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Age))+
+  geom_histogram(color="White", stat="count", fill="#c3892b")+
+  scale_x_continuous(breaks=17:26)
+```
+
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Gender))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  ggtitle("Gender")
+```
+
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=City))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  ggtitle("City")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Influenced))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  scale_x_discrete(guide = guide_axis(check.overlap = TRUE))+
+  ggtitle("Influenced")
+```
+
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Perseverance))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(Perseverance)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("Perseverance distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Perseverance))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("Perseverance")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=DesireToTakeInitiative))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(DesireToTakeInitiative)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("Desire To Take Initiative distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=DesireToTakeInitiative))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("DesireToTakeInitiative")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Competitiveness))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(Competitiveness)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("Competitiveness distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=Competitiveness))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("Competitiveness")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=SelfReliance))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(SelfReliance)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("Competitiveness distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=SelfReliance))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("SelfReliance")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=StrongNeedToAchieve))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(StrongNeedToAchieve)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("StrongNeedToAchieve distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=StrongNeedToAchieve))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("StrongNeedToAchieve")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=SelfConfidence))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(SelfConfidence)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("SelfConfidence distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=SelfConfidence))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("SelfConfidence")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=GoodPhysicalHealth))+
+  geom_histogram(aes(y=..density..),binwidth = 1, color="black", fill="#8f7c2f")+
+  scale_x_continuous(breaks=17:26)+
+  geom_density(alpha=.2, fill="#c3892b")+
+  geom_vline(aes(xintercept=mean(SelfConfidence)), color="#c3892b", linetype="dashed", size=1)+
+  ggtitle("GoodPhysicalHealth distribution")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=GoodPhysicalHealth))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("GoodPhysicalHealth")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=MentalDisorder))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("MentalDisorder")
+```
+```{r}
+library(ggplot2)
+ggplot(edadata, aes(x=y))+
+  geom_bar(color="White", stat="count", fill="#c3892b")+
+  ggtitle("Entreprenure")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=Age, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=17:26)+
+  ggtitle("Age vs Success")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=IndividualProject, y=y), stat="identity", fill="#c3892b")+
+  scale_x_continuous(breaks = 1:2, labels = c("Yes", "No"))+
+  ggtitle("Individual project vs Success")
+```
+
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=Gender, y=y), stat="identity", fill="#c3892b")+
+  ggtitle("Gender vs Success")+
+  scale_x_continuous(breaks=1:2, labels=c("Male", "Female"))
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=City, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:2, labels = c("No", "Yes"))+
+  ggtitle("City vs Success")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=Influenced, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:2, labels = c("Yes", "No"))+
+  ggtitle("Influenced vs Success")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=Perseverance, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Persevarance vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=DesireToTakeInitiative, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Desire to take initiate vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=Competitiveness, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Competitiveness vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=SelfReliance, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("SelfReliance vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=StrongNeedToAchieve, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Strong need to achieve vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=SelfConfidence, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Self confidence vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=GoodPhysicalHealth, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Good physical health vs Success : On scale of 5")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=MentalDisorder, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:2, labels = c("No", "Yes"))+
+  ggtitle("Mentl disorder vs Success")
+```
+```{r}
+library(ggplot2)
+ggplot(data=data2)+
+  geom_bar(
+    mapping = aes(x=MentalDisorder, y=y), stat="identity", fill="#c3892b"
+  )+
+  scale_x_continuous(breaks=1:5)+
+  ggtitle("Mentl disorder vs Success")
+
+```
+```{r}
+library(rsample)
+data_split <- initial_split(data2, prop = 0.70)
+data_train <- training(data_split)
+data_test <- testing(data_split)
+print(nrow(data_train))
+print(nrow(data_test))
+```
+KNN
+```{r}
+library(class)
+library(caret)
+knn_clf1 <- knn(train=data_train, test=data_test, cl=data_train$y, k=20)
+knn_clf2 <- knn(train=data_train, test=data_test, cl=data_train$y, k=25)
+knn_clf3 <- knn(train=data_train, test=data_test, cl=data_train$y, k=30)
+knn_clf4 <- knn(train=data_train, test=data_test, cl=data_train$y, k=35)
+knn_clf5 <- knn(train=data_train, test=data_test, cl=data_train$y, k=40)
+knn_clf6 <- knn(train=data_train, test=data_test, cl=data_train$y, k=10)
+
+```
+
+```{r}
+print("For k=20 :")
+print(confusionMatrix(table(knn_clf1 ,data_test$y)))
+```
+```{r}
+print("For k=25")
+print(confusionMatrix(table(knn_clf2 ,data_test$y)))
+```
+```{r}
+print("For k=30")
+print(confusionMatrix(table(knn_clf3 ,data_test$y)))
+```
+
+```{r}
+print("For k=35")
+print(confusionMatrix(table(knn_clf4 ,data_test$y)))
+```
+
+```{r}
+print("For k=40")
+print(confusionMatrix(table(knn_clf5 ,data_test$y)))
+```
+
+```{r}
+print("For k=10")
+print(confusionMatrix(table(knn_clf6 ,data_test$y)))
+```
+
+
+```{r}
+knna1 <- 100 * sum(data_test$y == knn_clf1)/NROW(data_test$y)
+knna2 <- 100 * sum(data_test$y == knn_clf2)/NROW(data_test$y)
+knna3 <- 100 * sum(data_test$y == knn_clf3)/NROW(data_test$y)
+knna4 <- 100 * sum(data_test$y == knn_clf4)/NROW(data_test$y)
+knna5 <- 100 * sum(data_test$y == knn_clf5)/NROW(data_test$y)
+knna6 <- 100 * sum(data_test$y == knn_clf6)/NROW(data_test$y)
+print(knna1)
+print(knna2)
+print(knna3)
+print(knna4)
+print(knna5)
+print(knna6)
+```
+
+```{r}
+datasc <- scale(data2)
+library(factoextra)
+fviz_nbclust(datasc, kmeans, method='wss')+
+  labs(subtitle = "Elbow method")
+```
+```{r}
+set.seed(123)
+km.res <- kmeans(datasc,2,nstart = 25)
+print(km.res)
+```
+```{r}
+set.seed(123)
+km.res1 <- kmeans(datasc,3,nstart = 25)
+print(km.res1)
+```
+```{r}
+set.seed(123)
+km.res2 <- kmeans(datasc,4,nstart = 25)
+print(km.res2)
+```
+
+```{r}
+fviz_cluster(kmeans(datasc, centers = 2, iter.max = 100, nstart = 100), data=datasc)
+```
+```{r}
+fviz_cluster(kmeans(datasc, centers = 3, iter.max = 100, nstart = 100), data=datasc)
+```
+```{r}
+fviz_cluster(kmeans(datasc, centers = 4, iter.max = 100, nstart = 100), data=datasc)
+```
+```{r}
+library(dplyr)
+clusters <- kmeans(datasc, centers = 2, iter.max = 100, nstart = 100)
+kmdf <- data.frame(data2$Age,data$EducationSector,data$IndividualProject,data$Gender,data$City,data$Influenced,data$y)
+colnames(kmdf) <- c("Age","Education sector","Indiv project","Gender","City","Influenced","y")
+kmdf <- kmdf |> mutate(cluster = clusters$cluster)
+head(kmdf)
+```
+K-medoid
+```{r}
+library(factoextra)
+library(cluster)
+library(ggplot2)
+fviz_nbclust(datasc,pam,method="wss")
+```
+```{r}
+set.seed(123)
+kmed1 <- pam(datasc, k=2)
+kmed2 <- pam(datasc, k=3)
+kmed3 <- pam(datasc, k=4)
+```
+
+```{r}
+library(factoextra)
+fviz_cluster(kmed1, data=datasc)
+```
+
+```{r}
+library(factoextra)
+fviz_cluster(kmed2, data=datasc)
+```
+```{r}
+library(factoextra)
+fviz_cluster(kmed3, data=datasc)
+```
+
+```{r}
+print(kmed1)
+```
+naive bayes
+```{r}
+library(naivebayes)
+nb_model <- naive_bayes(factor(y) ~., data=data_train)
+nb_model
+```
+```{r}
+p1 <- predict(nb_model,data_train)
+restab <- table(p1,data_train$y)
+print(restab)
+```
+```{r}
+p2 <- predict(nb_model, data_test)
+tab <- table(p2, data_test$y)
+print(tab)
+```
+```{r}
+library(rpart)
+tree <- rpart(y~., data_train)
+print(tree)
+```
+```{r}
+library(rpart.plot)
+rpart.plot(tree)
+```
+```{r}
+predict(tree,data_test)
+```
+svm
+```{r}
+sc_datatrain <- scale(data_train)
+sc_datatest <- scale(data_test)
+```
+
+
+```{r}
+library(e1071)
+classifier <- svm(y~.,
+                  data = data_train,
+                  type = "C-classification",
+                  kernel = "linear")
+```
+
+```{r}
+svmpred = predict(classifier, newdata = data_test)
+head(svmpred)
+```
+
+```{r}
+summary(classifier)
+```
+
+
+
+
+
+
+
+
+
